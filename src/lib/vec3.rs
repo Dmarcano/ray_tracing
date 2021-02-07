@@ -40,7 +40,7 @@ where T :Number
 impl<T : Number> Add for Vec3<T> {
     type Output = Vec3<T>;
 
-    fn add(self, other:Self) -> Self {
+    fn add(self, other:Self) -> Self::Output {
         Self { 
             x : self.x + other.x, 
             y : self.y + other.y, 
