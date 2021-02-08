@@ -15,10 +15,11 @@ where T : Number
     z : T 
 }
 
+type Color = Vec3<u8>;
 
-impl<T> Vec3<T> 
-where T :Number
-{ 
+type Point = Vec3<f64>;
+
+impl<T : Number> Vec3<T> { 
 
     pub fn new(x : T, y : T , z: T) -> Vec3<T> { 
         Vec3 { 
@@ -38,7 +39,7 @@ where T :Number
 }
 
 impl<T : Number> Add for Vec3<T> {
-    type Output = Vec3<T>;
+    type Output = Self;
 
     fn add(self, other:Self) -> Self::Output {
         Self { 
@@ -46,5 +47,26 @@ impl<T : Number> Add for Vec3<T> {
             y : self.y + other.y, 
             z : self.z + other.z
         }
+    }
+}
+
+impl<T: Number + Sub<Output = T>> Sub for Vec3<T> { 
+    type Output = Self; 
+
+    fn sub(self, other : Self) -> Self::Output { 
+        Self { 
+            x : self.x - other.x, 
+            y : self.y - other.y, 
+            z : self.z - other.z
+        }
+    }
+}
+
+impl <T : Number> Mul for Vec3<T> { 
+    type Output = Self; 
+
+    
+    fn mul(self, other: Self) ->Self::Output { 
+        todo!() 
     }
 }
