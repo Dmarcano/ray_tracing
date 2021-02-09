@@ -3,7 +3,7 @@ use std::ops::{Add, AddAssign, Mul, MulAssign,  Sub, SubAssign,  Div, DivAssign,
 use num_traits::identities::Zero; 
 
 /// A generic Number which can be assigned, 
-pub trait Number :  Zero + Add + Mul + Sub + Div + Neg + AddAssign + MulAssign + SubAssign + DivAssign{ 
+pub trait Number :  Zero + Add + Mul<Output = Self> + Sub<Output = Self> + Div<Output = Self> + Neg + AddAssign + MulAssign + SubAssign + DivAssign{ 
 
 }
 
@@ -50,7 +50,7 @@ impl<T : Number> Add for Vec3<T> {
     }
 }
 
-impl<T: Number + Sub<Output = T>> Sub for Vec3<T> { 
+impl<T: Number> Sub for Vec3<T> { 
     type Output = Self; 
 
     fn sub(self, other : Self) -> Self::Output { 
@@ -64,9 +64,25 @@ impl<T: Number + Sub<Output = T>> Sub for Vec3<T> {
 
 impl <T : Number> Mul for Vec3<T> { 
     type Output = Self; 
-
     
     fn mul(self, other: Self) ->Self::Output { 
-        todo!() 
+        Self { 
+            x : self.x * other.x, 
+            y : self.y * other.y, 
+            z : self.z * other.z
+        }
+    }
+}
+
+impl <T: Number> Div for Vec3<T> { 
+    type Output = Self; 
+
+    fn div(self, other: Self) -> Self::Output { 
+
+        Self { 
+            x : self.x / other.x, 
+            y : self.y / other.y, 
+            z : self.z / other.z,  
+        }
     }
 }
