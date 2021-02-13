@@ -2,12 +2,19 @@
 use std::ops::{Add, AddAssign, Mul, MulAssign,  Sub, SubAssign,  Div, DivAssign};
 use num_traits::identities::Zero; 
 
-/// A generic Number which can be assigned, 
+/// A generic Number super trait which places bounds on the types allowed to be used in a Vec3
 pub trait Number :  Zero + Add + Mul<Output = Self> + Sub<Output = Self> + Div<Output = Self> + AddAssign + MulAssign + SubAssign + DivAssign{ 
 
 }
 
-impl Number for u8 { }
+// A blank implementation of 
+macro_rules! number_impl {
+    ($($t:ty)*) => ($(
+        impl Number for $t { }
+    )*)
+}
+
+number_impl!{u8 u16 u32 u64 usize f32 f64  i8 i16 i32 i64}
 
 /// A struct that represents some vector which has 3Dimensional quantities. 
 pub struct Vec3<T> 
