@@ -1,2 +1,2 @@
-mod vec3; 
-mod view;
+pub mod vec3; 
+pub mod canvas;

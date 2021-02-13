@@ -1,23 +1,27 @@
 
-use std::ops::{Add, AddAssign, Mul, MulAssign,  Sub, SubAssign,  Div, DivAssign,  Neg};
+use std::ops::{Add, AddAssign, Mul, MulAssign,  Sub, SubAssign,  Div, DivAssign};
 use num_traits::identities::Zero; 
 
 /// A generic Number which can be assigned, 
-pub trait Number :  Zero + Add + Mul<Output = Self> + Sub<Output = Self> + Div<Output = Self> + Neg + AddAssign + MulAssign + SubAssign + DivAssign{ 
+pub trait Number :  Zero + Add + Mul<Output = Self> + Sub<Output = Self> + Div<Output = Self> + AddAssign + MulAssign + SubAssign + DivAssign{ 
 
 }
 
+impl Number for u8 { }
+
+/// A struct that represents some vector which has 3Dimensional quantities. 
 pub struct Vec3<T> 
 where T : Number
 { 
-    x : T, 
-    y : T, 
-    z : T 
+    pub x : T, 
+    pub y : T, 
+    pub z : T 
 }
 
-type Color = Vec3<u8>;
+/// A vector that holds RGB values of up to 255
+pub type Color = Vec3<u8>;
 
-type Point = Vec3<f64>;
+pub type Point = Vec3<f64>;
 
 impl<T : Number> Vec3<T> { 
 
