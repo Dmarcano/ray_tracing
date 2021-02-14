@@ -1,4 +1,4 @@
-use crate::lib::vec3::{Vec3, Number, Color}; 
+use crate::lib::vec3::{Vec3, Number}; 
 
 use std::fs::{File};
 use std::path::Path; 
