@@ -28,7 +28,7 @@ where T : Number
 /// A vector that holds RGB values of up to 255
 pub type Color = Vec3<u8>;
 
-pub type Point = Vec3<f64>;
+// pub type Point = Vec3<f64>;
 
 impl<T : Number> Vec3<T> { 
 

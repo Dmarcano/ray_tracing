@@ -2,12 +2,8 @@ use crate::lib::vec3::{Vec3, Number};
 
 use std::fs::{File};
 use std::path::Path; 
-use std::io::Seek;
+use std::io::{Seek, Write};
 use std::io; 
-
-// use std::io::Result; 
-
-
 
 /// A structure that contains a 2 Vector representation of a world canvas that is drawn on
 pub struct Canvas<T: Number> { 
@@ -24,14 +20,14 @@ impl<T: Number>  Canvas<T> {
     pub fn new(width : usize, height : usize ) -> Canvas<T> { 
         let mut buffer : Vec<Vec<Vec3<T>>> = Vec::with_capacity(width); 
 
-        for row_idx in 0..height { 
+        for _ in 0..height { 
             let mut canvas_col : Vec<Vec3<T>> = Vec::with_capacity(height);
             
-            for col_idx in 0..width { 
+            for _ in 0..width { 
                 let empty_vec = Vec3::<T>::zero(); 
-                canvas_col[col_idx] = empty_vec; 
+                canvas_col.push(empty_vec); 
             }
-            buffer[row_idx] = canvas_col; 
+            buffer.push(canvas_col); 
         }
 
         Canvas { 
@@ -72,7 +68,7 @@ impl CanvasRender for PpmFile {
         self.inner.seek(std::io::SeekFrom::Start(0))?; 
         self.inner.set_len(0)?;
         
-        write!(&mut self.inner, "P3\n{} {}\n255\n", canvas.width, canvas.height);
+        write!(&mut self.inner, "P3\n{} {}\n255\n", canvas.width, canvas.height)?;
 
         for row in canvas.buffer.iter() { 
             for color in row.iter() { 
