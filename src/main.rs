@@ -3,7 +3,51 @@ mod lib;
 use lib::vec3::Color;
 use lib::canvas::{Canvas, CanvasRender, PpmFile};
 
+use winit::{ 
+    event::*, 
+    event_loop::{EventLoop, ControlFlow}, 
+    window::{Window, WindowBuilder},
+};
+
 fn main() {
+    env_logger::init(); 
+    let event_loop = EventLoop::new(); 
+    let window = WindowBuilder::new()
+        .build(&event_loop)
+        .unwrap();
+
+    event_loop.run(move |event, _, control_flow| {
+        match event { 
+            Event::WindowEvent {
+                ref event, 
+                window_id
+            } if window_id == window.id() => match event { 
+                WindowEvent::CloseRequested => *control_flow = ControlFlow::Exit, 
+                WindowEvent::KeyboardInput { 
+                    input, 
+                    .. 
+                    } => {
+                        match input {
+                            KeyboardInput {
+                                state : ElementState::Pressed,
+                                virtual_keycode: Some(VirtualKeyCode::Escape),
+                                ..
+                            } => *control_flow = ControlFlow::Exit,
+                            _ => {}
+                        }
+                    }
+                _ => {}
+                }
+                _ => {} 
+        }
+    })
+    
+}
+
+
+
+
+fn ppm_example() { 
     let img_width : usize= 256; 
     let img_height : usize = 256; 
     let mut out_file = PpmFile::create("public/out.ppm").unwrap(); 
