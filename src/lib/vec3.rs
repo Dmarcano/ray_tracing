@@ -3,7 +3,7 @@ use std::ops::{Add, AddAssign, Mul, MulAssign,  Sub, SubAssign,  Div, DivAssign}
 use num_traits::identities::Zero; 
 
 /// A generic Number super trait which places bounds on the types allowed to be used in a Vec3
-pub trait Number :  Zero + Add + Mul<Output = Self> + Sub<Output = Self> + Div<Output = Self> + AddAssign + MulAssign + SubAssign + DivAssign{ 
+pub trait Number :  Zero + Add + Mul<Output = Self> + Sub<Output = Self> + Div<Output = Self> + AddAssign + MulAssign + SubAssign + DivAssign + Copy { 
 
 }
 
@@ -65,6 +65,38 @@ impl<T : Number> Vec3<T> {
             x : T::zero(), 
             y: T::zero(), 
             z: T::zero()
+        }
+    }
+
+    pub fn dot(u : &Self, v: &Self) -> T { 
+       (u.x * v.x) + (u.y * v.y) + (u.z * v.z) 
+    }
+
+    pub fn len_squared(&self) -> T{ 
+        self.x * self.x + self.y * self.y + self.z * self.z 
+    }
+
+    pub fn cross(u : &Self, v : &Self) -> Self { 
+        Vec3 { 
+            x: u.y * v.z - u.z * v.y, 
+            y: u.z * v.x - u.x * v.z, 
+            z : u.x * v.y - u.y * v.x
+        }
+    }
+}
+
+impl Vec3<f64> { 
+    pub fn len(&self) -> f64 { 
+        self.len().sqrt()
+    }
+
+    pub fn unit_vec(&self) -> Self { 
+        let len = self.len(); 
+
+        Vec3 { 
+            x: self.x/len, 
+            y: self.y/len, 
+            z: self.z/len
         }
     }
 }
@@ -171,6 +203,16 @@ mod test{
         assert_eq!(out, expected); 
         first /= first.clone(); 
         assert_eq!(first, expected)
+    }
+
+    #[test]
+    fn dot_test() {
+        unimplemented!();
+    }
+
+    #[test]
+    fn cross_test() {
+        unimplemented!();
     }
 
 }
