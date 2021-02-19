@@ -42,7 +42,7 @@ impl<T: Number>  Canvas<T> {
 pub trait CanvasRender { 
 
     // for now stick to an u8 canvas
-    fn render(&mut self, canvas : &Canvas<u8> ) -> io::Result<()>;
+    fn render_canvas(&mut self, canvas : &Canvas<u8> ) -> io::Result<()>;
 }
 
 
@@ -63,7 +63,7 @@ impl PpmFile {
 
 impl CanvasRender for PpmFile { 
 
-    fn render(&mut self, canvas: &Canvas<u8>)  -> io::Result<()> { 
+    fn render_canvas(&mut self, canvas: &Canvas<u8>)  -> io::Result<()> { 
 
         self.inner.seek(std::io::SeekFrom::Start(0))?; 
         self.inner.set_len(0)?;
