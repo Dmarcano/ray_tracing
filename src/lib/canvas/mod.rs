@@ -5,6 +5,14 @@ use std::path::Path;
 use std::io::{Seek, Write};
 use std::io; 
 
+use wgpu; 
+use winit::{ 
+    event::*, 
+    event_loop::{EventLoop, ControlFlow}, 
+    window::{Window, WindowBuilder},
+};
+
+
 /// A structure that contains a 2 Vector representation of a world canvas that is drawn on
 pub struct Canvas<T: Number> { 
 
@@ -77,4 +85,42 @@ impl CanvasRender for PpmFile {
         };
         Ok(())
     }
+}
+
+
+
+struct WgpuRenderer { 
+    surface : wgpu::Surface, 
+    device : wgpu::Device, 
+    queue : wgpu::Queue, 
+    sc_descriptor : wgpu::SwapChainDescriptor, 
+    swap_chain : wgpu::SwapChain, 
+    size : winit::dpi::PhysicalSize<u32>, 
+}
+
+
+impl WgpuRenderer { 
+
+    // async function for making a new 
+    async fn new(window: &Window) -> Self{
+        todo!()
+    }
+
+
+    fn resize(&mut self, new_size : winit::dpi::PhysicalSize<u32>) { 
+        todo!()
+    }
+
+    fn input(&mut self, event : &WindowEvent) -> bool { 
+        todo!()
+    }
+
+    fn update(&mut self) { 
+        todo!()
+    }
+
+    fn render(&mut self) -> Result<(), wgpu::SwapChainError> { 
+        todo!()
+    }
+
 }
