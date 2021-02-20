@@ -2,6 +2,7 @@ mod lib;
 
 use lib::vec3::Color;
 use lib::canvas::{Canvas, CanvasRender, PpmFile};
+use lib::ray::Ray; 
 
 fn main() {
     let img_width : usize= 256; 
@@ -13,7 +14,10 @@ fn main() {
     out_file.render(&canvas).unwrap(); 
 }
 
-
+fn ray_color(ray : &Ray) { 
+    let unit_vec = ray.direction.unit_vec();
+    // let t = 
+}
 
 fn draw_gradient(canvas : &mut Canvas<u8>) { 
     let img_height = canvas.height; 
