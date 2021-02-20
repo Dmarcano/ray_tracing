@@ -46,7 +46,7 @@ macro_rules! ops_assign_impl {
 ops_assign_impl!(+=, AddAssign, add_assign); 
 ops_assign_impl!(-=, SubAssign, sub_assign); 
 
-
+// public methods for Vector
 impl<T : Number> Vec3<T> { 
 
     pub fn new(x : T, y : T , z: T) -> Vec3<T> { 
@@ -65,9 +65,11 @@ impl<T : Number> Vec3<T> {
         }
     }
 
+    /// Take the vector dot product of vectors u and v respectively
     pub fn dot(u : &Self, v: &Self) -> T { 
        (u.x * v.x) + (u.y * v.y) + (u.z * v.z) 
     }
+
 
     pub fn len_squared(&self) -> T{ 
         self.x * self.x + self.y * self.y + self.z * self.z 
@@ -82,21 +84,42 @@ impl<T : Number> Vec3<T> {
     }
 }
 
-impl Vec3<f64> { 
-    pub fn len(&self) -> f64 { 
-        (self.len() as f64).sqrt()
-    }
+// Rust does not carry a square root function that works on all types so types must be converted to floats 
+// before returning a value. This means that one needs to convert between T and f64 but Rust does not allow 
+// the implicit Conversion between T regardless on what limitations one puts on T so instead we make a macro and 
+// implement the methods on various types we may use.
+macro_rules! vec_norm_impl {
+    ($t:ty) => {
+        impl Vec3<$t> { 
+            
+            /// Take the unit length of the vector. Do note that the inner values of the vectors are converted to 64-bit floats for 
+            /// taking the square root of the squared norm of the vector. This may lead to innacuracies in specific cases where floating point values are not used.
+            pub fn len(&self) -> $t { 
+                ((self.len_squared() as f64).sqrt()) as $t
+            }
 
-    pub fn unit_vec(&self) -> Self { 
-        let len = self.len(); 
-
-        Vec3 { 
-            x: self.x/len, 
-            y: self.y/len, 
-            z: self.z/len
+            // Find the vector with norm of 1 in the same direction as our current vector. Note that this may be innacurate when using vectors that are 
+            // not double or single precision floats since taking the square root to find the norm of a vector relies on converision to and from a double 
+            // floating point number. 
+            pub fn unit_vec(&self) -> Self { 
+                let len = self.len(); 
+                Vec3 { 
+                    x: self.x/len, 
+                    y: self.y/len, 
+                    z: self.z/len
+                }
+            }
         }
-    }
+    };
 }
+
+vec_norm_impl!(f32);
+vec_norm_impl!(f64);
+vec_norm_impl!(u8);
+vec_norm_impl!(u16);
+vec_norm_impl!(u32);
+vec_norm_impl!(u64);
+
 
 // vector addition
 impl<T : Number> Add for Vec3<T> {
