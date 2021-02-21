@@ -59,7 +59,7 @@ fn main() {
         Pixels::new(img_width as u32, img_height as u32, surface_texture).unwrap()
     };
 
-    draw_gradient(&mut canvas);
+    draw_lerp(&mut canvas);
 
     pixel_buff.render_canvas(&mut canvas).unwrap(); 
     pixel_buff.render().unwrap(); 
@@ -76,17 +76,28 @@ fn main() {
         }
     });
 
-     
+    
+}
 
-    // out_file.render(&canvas).unwrap(); 
-    draw_lerp(&mut canvas);
-    out_file.render(&canvas).unwrap(); 
+fn hit_sphere(center : &Point, radius : f64 ,ray: &Ray) -> bool { 
+    let oc = ray.origin - *center; 
+    let a = Vec3::dot(&ray.direction, &ray.direction);
+    let b = 2.0 * Vec3::dot(&oc, &ray.direction);
+    let c  = Vec3::dot(&oc, &oc) - radius*radius;
+    let discriminant = b*b - a*c*4.0;
+    discriminant > 0.0
 }
 
 fn ray_color(ray : &Ray) ->Vec3<f64>{ 
     let unit_vec = ray.direction.unit_vec();
     let t = (unit_vec.y + 1.0)*0.5;
-    Vec3::new(1.0, 1.0, 1.0)*(1.0-t) + Vec3::new(0.5, 0.7, 1.0)*t
+
+    if hit_sphere(&Vec3::new(0.0, 0.0, -1.0),0.5, &ray) { 
+        return Vec3::new(1.0, 0.0, 0.0)
+    }
+    // a linear gradient on the value t which is proportional to the y value of the vectors
+    // start near blue when t is small and end at white when t is large. 
+    Vec3::new(1.0, 1.0, 1.0)*t + Vec3::new(0.5, 0.7, 1.0)*(1.0-t)
 }
 
 fn draw_lerp(canvas: &mut Canvas<u8>) { 
@@ -98,11 +109,13 @@ fn draw_lerp(canvas: &mut Canvas<u8>) {
     let viewport_width = 16.0/9.0 * viewport_height; 
     let focal_len = 1.0; 
     
+    // setup the scene
     let origin = Point::zero();
     let horizontal = Point::new(viewport_width, 0.0, 0.0);
     let vertical = Point::new(0.0, viewport_height, 0.0);
     let lower_left_corner = origin - horizontal/2.0 - vertical/2.0 - Point::new(0.0, 0.0, focal_len);
 
+    // draw the gradient
     for j in (0..height).rev() { 
         for i in 0..width { 
             let u = i as f64 / ((width - 1) as f64);
