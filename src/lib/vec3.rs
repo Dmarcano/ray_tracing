@@ -4,7 +4,7 @@ use num_traits::identities::Zero;
 
 /// A generic Number super trait which places bounds on the types allowed to be used in a Vec3
 pub trait Number :  Zero + Add + Mul<Output = Self> + Sub<Output = Self> + Div<Output = Self> + AddAssign + MulAssign + SubAssign + DivAssign + Copy { 
-
+// this turned out to be more jank than I realized 
 }
 
 #[derive(PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
