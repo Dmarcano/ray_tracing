@@ -1,4 +1,4 @@
-# Ray Tracing using Rust. 
+# Ray Tracing Using Rust. 
 
 This is a simple ray tracer built using Rust. This is more or less a very faithfull recreation of [the ray tracing in a weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
  online tutorial and functions as a fun way to experiment a bit more with Rust's features.
@@ -8,12 +8,12 @@ This is a simple ray tracer built using Rust. This is more or less a very faithf
 - [x] Vector class over generic types
 - [x] Rendering simple gradients to a file
 - [x] Rendering to a realtime window ([winit](https://github.com/rust-windowing/winit) and [pixels](https://github.com/parasyte/pixels))
-- [] Rendering spheres (WIP)
-- [] Arbitrary object rendering
-- [] Rendering diffuse materials
-- [] Multithreading (rayon) 
-- [] Moveable Camera
-- [] WebAssembly
+- [ ] Rendering spheres (WIP)
+- [ ] Arbitrary object rendering
+- [ ] Rendering diffuse materials
+- [ ] Multithreading (rayon) 
+- [ ] Moveable Camera
+- [ ] WebAssembly
 
 ### Example
 
