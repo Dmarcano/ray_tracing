@@ -70,6 +70,8 @@ fn main() {
     // and we render it out afterwards
     pixel_buff.render_canvas(&mut canvas).unwrap(); 
     pixel_buff.render().unwrap(); 
+    // right now i comment and uncomment this line as I want to render files
+    out_file.render_canvas(&canvas).unwrap();
 
 
     event_loop.run(move |event, _, control_flow| {
