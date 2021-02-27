@@ -11,7 +11,7 @@ This is a simple ray tracer built using Rust. This is more or less a very faithf
 - [ ] Rendering spheres (WIP)
 - [ ] Arbitrary object rendering
 - [ ] Rendering diffuse materials
-- [ ] Multithreading (rayon) 
+- [ ] Parallelize the computation ([rayon](https://github.com/rayon-rs/rayon)) 
 - [ ] Moveable Camera
 - [ ] WebAssembly
 
