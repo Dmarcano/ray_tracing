@@ -14,9 +14,10 @@ use winit::{
 use winit_input_helper::WinitInputHelper; 
 
 
+
 impl CanvasRender for Pixels<Window> { 
 
-fn render_canvas(&mut self, canvas: &Canvas<u8>) -> Result<(), std::io::Error> { 
+    fn render_canvas(&mut self, canvas: &Canvas<u8>) -> Result<(), std::io::Error> { 
         let frame = self.get_frame(); 
 
         canvas.buffer.iter().flatten().enumerate().for_each(|(i, row)|{
@@ -34,9 +35,13 @@ fn render_canvas(&mut self, canvas: &Canvas<u8>) -> Result<(), std::io::Error> {
 }
 
 fn main() {
+    // here we setup the virtual viewport for the aspect ratio of the image
     let aspect_ration = 16.0/9.0;
+    // then we create an image that is at least x width and has a height in line with 
+    // the aspect ratio
     let img_width : usize= 400; 
     let img_height : usize = (img_width as f64 / aspect_ration) as usize; 
+    // This ppm file is one way the canvas can be rendered.
     let mut out_file = PpmFile::create("public/out.ppm").unwrap(); 
     let mut canvas = Canvas::<u8>::new(img_width, img_height);
 
@@ -52,15 +57,17 @@ fn main() {
             .build(&event_loop)
             .unwrap()
     };
-
+    // Here we create a 4*L*W buffer which is how we can render in real time.
     let mut pixel_buff = { 
         let window_size = window.inner_size(); 
         let surface_texture = SurfaceTexture::new(window_size.width, window_size.height, &window);
         Pixels::new(img_width as u32, img_height as u32, surface_texture).unwrap()
     };
 
+    // Here is where the ray tracer "ray traces" our canvas
     draw_lerp(&mut canvas);
 
+    // and we render it out afterwards
     pixel_buff.render_canvas(&mut canvas).unwrap(); 
     pixel_buff.render().unwrap(); 
 
@@ -79,6 +86,7 @@ fn main() {
     
 }
 
+// function for whether some ray has hit a sphere in our view.
 fn hit_sphere(center : &Point, radius : f64 ,ray: &Ray) -> bool { 
     let oc = ray.origin - *center; 
     let a = Vec3::dot(&ray.direction, &ray.direction);
@@ -100,6 +108,8 @@ fn ray_color(ray : &Ray) ->Vec3<f64>{
     Vec3::new(1.0, 1.0, 1.0)*t + Vec3::new(0.5, 0.7, 1.0)*(1.0-t)
 }
 
+// A quick linear interpolation that renders an image from white to blue based 
+// on where in the y axis of the virtual viewport it is.
 fn draw_lerp(canvas: &mut Canvas<u8>) { 
     let width = canvas.width; 
     let height = canvas.height; 
@@ -118,9 +128,12 @@ fn draw_lerp(canvas: &mut Canvas<u8>) {
     // draw the gradient
     for j in (0..height).rev() { 
         for i in 0..width { 
+            // u and v are vectors which are component vectors that make up the x and y 
+            // components of our ray from the camera to the pixel that is currentli traced.
             let u = i as f64 / ((width - 1) as f64);
             let v = j as f64 / ((height - 1) as f64);
             let ray = Ray::new(origin, lower_left_corner + horizontal*u + vertical*v - origin);
+            // here in drawing our ray tracing we give it a function that takes in our 
             let color_64 = ray_color(&ray);
             let color = convert_color(&color_64);
             canvas.buffer[j][i] = color;
@@ -128,6 +141,7 @@ fn draw_lerp(canvas: &mut Canvas<u8>) {
     }
 }
 
+// abstract away converting from a floating point Vec3 to a uint8 
 fn convert_color(color_64 : &Vec3<f64>) -> Color { 
     Color { 
         x : (color_64.x * 255.999) as u8,
@@ -136,7 +150,8 @@ fn convert_color(color_64 : &Vec3<f64>) -> Color {
     }
 }
 
-
+// this is a sample function that draws a pure gradient of colors to test out 
+// the rendering capabilities of any rederer. No ray tracing code here.
 fn draw_gradient(canvas : &mut Canvas<u8>) { 
     let img_height = canvas.height; 
     let img_width = canvas.width; 

@@ -22,7 +22,9 @@ pub type Color = Vec3<u8>;
 
 pub type Point = Vec3<f64>;
 
-// A blank implementation of 
+// A blank implementation of the abstract Number Super Trait that really just enforces 
+// that types that are in our Vec3 are some sort of numeric which we expect. This way 
+// our vector only ever has types like uint8 which can be limiting in some cases.
 macro_rules! number_impl {
     ($($t:ty)*) => ($(
         impl Number for $t { }
@@ -30,7 +32,8 @@ macro_rules! number_impl {
 }
 number_impl!{u8 u16 u32 u64 usize f32 f64  i8 i16 i32 i64}
 
-// To assign an operator is to always 
+// The operator assing for addition and subtraction are very similiar but really 
+// I wanted to try writing a macro
 macro_rules! ops_assign_impl {
     ($operand: tt, $trait_name : ident, $fn_name : ident ) => {
         impl<T: Number> $trait_name for Vec3<T> { 
